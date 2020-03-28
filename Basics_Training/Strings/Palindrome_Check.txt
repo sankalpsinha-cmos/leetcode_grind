@@ -1,0 +1,62 @@
+Question: Palindrome Check
+
+Write a function that takes in a non-empty string and that returns a boolean representing whether or not the string is a palindrome. A palindrome is defined as a string that is written the same forward and backward.
+
+Sample Input: "abcdcba"
+Sample Output: True
+
+-------------------------- Reverse the string --------------------------------
+Reverse the string and check it against the actual string.
+
+Time: O(N)
+Space: O(N)
+------------------------------------------------------------------------------
+-------------------------- Recursion -----------------------------------------
+Compare the characters at the end of the string and then call the function again on the smaller string:
+ie: 'a bcdcb a' compare the a's and then call again on 'bcdcb'.
+
+Time: O(N)
+Space: O(N)
+
+Code:
+
+using namespace std;
+
+bool is_palindrome(string s, int start_index)
+{
+	int last_index = s.length() - start_index - 1;
+	if(s[start_index] != s[last_index]) return false;
+	if(start_index == last_index) return true;
+	is_palindrome(s,start_index+1);
+}
+
+bool isPalindrome(string str) {
+	return is_palindrome(str,0);
+}
+------------------------------------------------------------------------------
+-------------------------- BEST(Two Pointer Approach) ------------------------
+Take two pointers at the ends of the string and move inwards comparing each character of the string. If they don't match then return false else return true.
+
+Time: O(N)
+Space: O(1)
+
+Code:
+
+using namespace std;
+
+bool isPalindrome(string str) {
+  int start = 0;
+	int end = str.length() - 1;
+	bool is_palindrome = true;
+	while(start <= end)
+	{
+		if(str[start] != str[end])
+		{
+			is_palindrome = false;
+			break;
+		}
+		start++;
+		end--;
+	}
+	return is_palindrome;
+}

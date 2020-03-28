@@ -1,0 +1,78 @@
+Question: Given an array. Find the smallest subarray that when sorted will make the given array sorted.
+
+Write a function that takes in an array of integers of length at least 2. The function should return an array of the starting and ending indices of the smallest subarray in the input array that needs to be sorted in place in order for the entire input array to be sorted. If the input array is already sorted, the function should return [-1, -1].
+
+Sample Input: [1,2,4,7,10,11,7,12,6,7,16,18,19]
+Sample Output: [3,9]
+Notice that a(0 to 2) are sorted and a(10 to 12) are also sorted. So if we sort the subarray a(3,9) the whole array becomes sorted.
+
+Sample Input: [10, 12, 20, 30, 25, 40, 32, 31, 35, 50, 60]
+Sample Output: [3,8]
+
+Sample Input: [0, 1, 15, 25, 6, 7, 30, 40, 50]
+Sample Output: [2,5]
+
+Sample Input: [1,2,3,4,5,6,7,8,9,10]
+Sample Output: [-1,-1]
+
+-------------------------------------- The Only Idea ------------------------------------
+1: Traverse through the array and find:
+  a: The smallest number that is out of order.
+  b: The largest number that is out of order.
+2: Now find the correct index for the smallest number that is out of order.
+3: Now find the correct index for the largest number that is out of order.
+4: Return the pair[correct index for the smallest number, correct index of the largest number].
+
+Time: O(N) - As in one pass we find the smallest and largest numbers that are out of order. In the second pass we find their corect position. Then return a tuple with their correct positions as the output.
+Space: O(1) - just some variables.
+
+-------------------------------------- CODE ----------------------------------------------
+#include <vector>
+using namespace std;
+
+bool is_out_of_order(int index, vector<int> *array)
+{
+	if(index == 0) return(array->at(index) > array->at(index + 1));
+	else if(index == array->size() - 1) return(array->at(index - 1) > array->at(index));
+	else return(array->at(index - 1) > array->at(index) || array->at(index) > array->at(index + 1));
+}
+
+
+vector<int> subarraySort(vector<int> array) {
+	if(array.size() <= 1) return vector<int> {-1,-1};
+	vector<int> ans;
+	int smallest_no_out_of_order = INT_MAX;
+	int largest_no_out_of_order = INT_MIN;
+	for(int i = 0; i < array.size(); i++)
+	{
+		if(is_out_of_order(i,&array))
+		{
+			if(array[i] < smallest_no_out_of_order)smallest_no_out_of_order = array[i];
+			if(array[i] > largest_no_out_of_order)largest_no_out_of_order = array[i];
+		}
+	}
+	if(smallest_no_out_of_order == INT_MAX && largest_no_out_of_order == INT_MIN)
+	{
+		return vector<int> {-1,-1};
+	}
+	else
+	{
+		for(int i = 0; i < array.size(); i++)
+		{
+			if(array[i] > smallest_no_out_of_order)
+			{
+				ans.push_back(i);
+				break;
+			}
+		}
+		for(int j = array.size() - 1; j >= 0; j--)
+		{
+			if(array[j] < largest_no_out_of_order)
+			{
+				ans.push_back(j);
+				break;
+			}
+		}
+	}
+	return ans;
+}

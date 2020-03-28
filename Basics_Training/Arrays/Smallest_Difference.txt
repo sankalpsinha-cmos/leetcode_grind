@@ -1,0 +1,39 @@
+Question: Smallest Difference
+
+Write a function that takes in two non-empty arrays of integers. The function should find the pair of numbers (one from the first array, one from the second array) whose absolute difference is closest to zero. The function should return an array containing these two numbers, with the number from the first array in the first position. Assume that there will only be one pair of numbers with the smallest difference.
+
+Sample Input: [-1,5,10,20,28,3] [26,134,135,15,17]
+Sample Output: [28,26]
+
+-------------------------- LOGIC ------------------------------------
+For every element in the first array, pair it up with every element in the second array. For every pair calculate abs(a1[i],a2[j]) and see which one is the smallest. Return the best pair.
+
+ Time: O(N*M) - Where |a1|=N and |a2|=M.
+ Space: O(1) - Only some local variables.
+-------------------------- CODE -------------------------------------
+#include <vector>
+using namespace std;
+
+vector<int> smallestDifference(vector<int> arrayOne, vector<int> arrayTwo) {
+  int i = 0;
+	int j = 0;
+	int num1 = 0;
+	int num2 = 0;
+	int smallest_diff = INT_MAX;
+	vector<int> ans;
+	for(int i = 0; i < arrayOne.size(); i++)
+	{
+		for(int j = 0; j < arrayTwo.size(); j++)
+		{
+			if(abs(arrayOne[i] - arrayTwo[j]) < smallest_diff)
+			{
+				smallest_diff = abs(arrayOne[i] - arrayTwo[j]);
+				num1 = arrayOne[i];
+				num2 = arrayTwo[j];
+			}
+		}
+	}
+	ans.push_back(num1);
+	ans.push_back(num2);
+	return ans;
+}

@@ -1,0 +1,136 @@
+Question: Apartment Hunting
+
+You're looking to move into a new apartment, and you're given a list of blocks where each block contains an apartment that you could move into. In order to pick your apartment, you want to optimize its location. You also have a list of requirements: a list of buildings that are important to you. For instance, you might value having a school and a gym near your apartment. The list of blocks that you have contains information at every block about all of the buildings that are present and absent at the block in question. For instance, for every block, you might know whether a school, a pool, an office, and a gym are present or not. In order to optimize your life, you want to minimize the farthest distance you'd have to walk from your apartment to reach all of your required buildings. Write a function that takes in a list of blocks and a list of your required buildings and that returns the location (the index) of the block that is most optimal for you.
+
+Sample Input:
+[
+{
+"gym": False,
+"school": True,
+"store": False,
+},
+{
+"gym": True,
+"school": False,
+"store": False,
+},
+{
+"gym": True,
+"school": True,
+"store": False,
+},
+{
+"gym": False,
+"school": True,
+"store": False,
+},
+{
+"gym": False,
+"school": True,
+"store": True,
+},
+],
+["gym","school","store"]
+
+Sample Output: 3
+at index 3 the farthest you would have to walk to reach a gym, a school or a store is 1 block. At any other index you would have to walk further.
+
+------------------------------ NAIVE IDEA --------------------------------------
+1: Make a vector of maps, in which each entry is a map that store the distances to all the nearest facility from that block.
+2: We use 1 for loop and 2 while loops to calculate the distances to the nearest facility for each block. One while loop looks to the right and the other to the left of that block.
+3: Now we look through each block and its calculated distances. We look for the block that has the least max distance that needs to be traveled. This block is the answer as we will have to travel the least distance to reach all the facilities we want.
+
+Assume there are N blocks and we have M requirements.
+
+Time: O(M(N^2)) - As it takes O(N^2) time to calculate the distances for one requirement, it will take M times for all.
+Space: O(N) - As we keep a vector of maps that is the size of the original blocks vector.
+
+------------------------------- NAIVE CODE -------------------------------------
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+int apartmentHunting(vector<unordered_map<string, bool>> blocks,
+                     vector<string> reqs) {
+  // The vector tat holds the calculated distances for all the blocks.
+  vector<unordered_map<string,int>> book;
+
+  // Initialising in the books vector.
+	for(int i = 0; i < blocks.size(); i++)
+	{
+		unordered_map<string,int> page;
+		for(int r = 0; r < reqs.size(); r++)
+		{
+			page.insert({reqs[r],INT_MAX});
+		}
+		page.insert({"max",INT_MIN});
+		book.push_back(page);
+	}
+
+// Calculate the distances to all the requirements from each block.
+// We assume we are living in block 'i' and look towards the right and left of  // block 'i'. Then calculate the minimum distances to each of the requirements.
+	for(int i = 0; i < blocks.size(); i++)
+	{
+		for(int r = 0; r < reqs.size(); r++)
+		{
+			// Look to right of 'i'.
+			for(int j = i; j < blocks.size(); j++)
+			{
+				auto itr = blocks[j].find(reqs[r]);
+				int distance = abs(i-j);
+				if(itr->second == true && distance < book[i][reqs[r]])
+				{
+					book[i][reqs[r]] = distance;
+					break;
+				}
+			}
+			// Look to left of 'i'.
+			for(int j = i-1; j >= 0; j--)
+			{
+				auto itr = blocks[j].find(reqs[r]);
+				int distance = abs(i-j);
+				if(itr->second == true && distance < book[i][reqs[r]])
+				{
+					book[i][reqs[r]] = distance;
+					break;
+				}
+			}
+		}
+	}
+
+  // Now we find the
+	for(int i = 0; i < book.size(); i++)
+	{
+		int max = INT_MIN;
+		for(int r = 0; r < reqs.size(); r++)
+		{
+			if(max < book[i][reqs[r]]) max = book[i][reqs[r]];
+		}
+		book[i]["max"] = max;
+	}
+
+	int min = INT_MAX;
+	int index = -1;
+	for(int i = 0; i < book.size(); i++)
+	{
+		if(book[i]["max"] < min)
+		{
+			min = book[i]["max"];
+			index = i;
+		}
+	}
+	return index;
+}
+--------------------------------------------------------------------------------
+
+------------------------------- BEST IDEA --------------------------------------
+We take O(N^2) time to calculate the distances for each block, because we run two while loops to look left and right of the given block.
+
+The calculation of distances for all block can be done with just two passes, one pass from left to right and the other from right to left.
+
+The technique is useful if the solution to a problem is dependent on pre-calculated values. Like in this question the solution depends on the calculated values of the distances for each block.
+
+THE CLEVER ALGORITHM:

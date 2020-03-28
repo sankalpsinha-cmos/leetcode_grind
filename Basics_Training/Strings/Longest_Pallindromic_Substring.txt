@@ -1,0 +1,87 @@
+Question: Longest Palindromic Substring
+
+Write a function that, given a string, returns its longest palindromic substring. A palindrome is defined as a string that is written the same forward and backward. Assume that there will only be one longest palindromic substring.
+
+Sample Input: 'abaxyzzyxf'
+Sample Output: 'xyzzyx'
+
+-------------------------------- NAIVE LOGIC -----------------------------------
+1: Generate all the substrings for the given string.
+2: Check all the substrings for palindromic nature. Return the largest substring.
+
+Time: O(N^3) - It takes O(N^2) to generate the indices the all the substring. It takes O(N) to check if a given substring is palindromic.
+Space: O(1) - As we just generate the indices of the substring and then pass them to the is_palindrome function.
+
+------------------------------------ CODE --------------------------------------
+
+--------------------------------- BEST IDEA ------------------------------------
+1: Traverse the string.
+2: Each alphabet and the blank space right to it can be the two possible centres for a palindrome substring.
+  a: In 'abc', b can a centre for a palindromic substring.
+  b: In 'abc', and the space just right of the letter b can be a centre for a palindromic substring.
+3: Using the two centres we can expand to the left and right and try and find the longest palindromic string.
+4: Run a while loop for each case.
+5: Make a temp string, that stores the longest palindromic substring found till now.
+5: Which ever case creates the palindromic substring larger than the current temp string replace the temp with that.
+6: Return temp when the for loop at 1 ends.
+
+Time: O(N^2) - O(N) to traverse the given string. And in the worst case we have to traverse the
+
+------------------------------------ CODE --------------------------------------
+using namespace std;
+
+string longestPalindromicSubstring(string str) {
+	if(str.size()==1)return str;
+	string ans ="";
+  for(int i = 0; i < str.size(); i++)
+	{
+		// Case 1: The letter is the centre of the palindrome.
+		int left = i - 1;
+		int right = i + 1;
+		bool found_a_palindrome = false;
+		while(left >= 0 && right <= str.size() -1)
+		{
+			if(str[left] == str[right])
+			{
+				found_a_palindrome = true;
+				left--;
+				right++;
+			}
+			else break;
+		}
+		if(found_a_palindrome)
+		{
+			if(ans.size() < right-left-1)
+			{
+				ans.clear();
+				for(int i = left+1; i <= right-1; i++)ans.push_back(str[i]);
+			}
+		}
+
+		//Case 2: assume just right of the letter is the centre of the palindrome
+		left = i;
+		right = i + 1;
+		found_a_palindrome = false;
+		while(left >= 0 && right <= str.size() -1)
+		{
+			if(str[left] == str[right])
+			{
+				found_a_palindrome = true;
+				left--;
+				right++;
+			}
+			else break;
+		}
+		if(found_a_palindrome)
+		{
+			if(ans.size() < right-left-1)
+			{
+				ans.clear();
+				for(int i = left+1; i <= right-1; i++)ans.push_back(str[i]);
+			}
+		}
+	}
+	return ans;
+
+}
+--------------------------------------------------------------------------------

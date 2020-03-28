@@ -1,0 +1,73 @@
+Question: Detect and Find the loop in a singly linked list.
+
+Write a function that takes in the head of a Singly Linked List that contains a loop (in other words, the list's tail node points to some node in the list instead of the None (null) value). The function should return the node (the actual node - not just its value) from which the loop originates in constant space. Note that every node in the Singly Linked List has a "value" property storing its value as well as a "next" property pointing to the next node in the list.
+
+Sample Input:
+n0->n1->n2->n3->n4->n5->n6
+                ^       |
+                n9<-n8<-n7
+
+Sapmle Output: n4
+
+-------------------------------------------- Naive Solution ---------------------------------------------------------
+Use a hash table. Traverse the linked list and hash each element visted into the hash table. Do this till you get to the first element that is already in the hash table. This element is the start of the loop in the liked list.
+If the linked list has no loop then you will reach the nullptr and no elment will be hashed more than once.
+
+Time: O(N)
+Space: O(N)
+
+-----------------------------------------------------------------------------------------------------------------------
+--------------------------------------------- Best Solution ----------------------------------------------------------
+Use two pointers and math. Read the PDF for the math and logic behind this approach.
+1: Take two pointers slow and fast.
+2: Start both the pointers at the head of the liked list.
+3: Make the slow run with increments of 1 step.
+4: Make the fast run with increments of 2 steps.
+5: Stop when they meet or if either of them reaches a nullptr then the linked list has no loop.
+6: If the two pointers meet in step 5, reset just the fast pointer back to the head of the linked list.
+7: Run the fast and slow pointers with increments of 1 step till they meet.
+8: Return the slow or fast as this is the start of the loop in the lisked list.
+
+Time: O(N)
+Space: O(1)
+
+Code:
+
+#include <vector>
+using namespace std;
+
+class LinkedList {
+  public:
+    int value;
+    LinkedList* next;
+
+    LinkedList(int value);
+    void addMany(vector<int> values);
+    LinkedList* getNthNode(int n);
+};
+
+LinkedList* findLoop(LinkedList* head) {
+  LinkedList *slow = head;
+	LinkedList *fast = head;
+	if(!slow->next) return head;
+	do{
+		fast = fast->next->next;
+		slow = slow->next;
+	}while(fast != nullptr && slow!=nullptr && slow != fast);
+	if(slow == fast)
+	{
+		fast = head;
+		while(fast != slow)
+		{
+			fast = fast->next;
+			slow = slow->next;
+		}
+		return slow;
+	}
+	else
+	{
+		return head;
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------------------

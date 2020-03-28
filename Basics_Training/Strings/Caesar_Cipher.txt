@@ -1,0 +1,39 @@
+Question: Caesar Cipher
+
+Given a non-empty string of lowercase letters and a non-negative integer value representing a key, write a function that returns a new string obtained by shifting every letter in the input string by k positions in the alphabet, where k is the key. Note that letters should "wrap" around the alphabet; in other words, the letter "z" shifted by 1 returns the letter "a".
+
+Sample Input: "xyz", 2
+Sample Output: "zab"
+
+Note: The shift value can be greater than the no of alphabets in the english language.
+
+---------------------------- The Recursive Method ----------------------------
+divide the shift number k by the size of the alphabet set m to find k % m = r. Do this recursively till r < m. Then the shifted character is given by the rth index in the alphabet set.
+
+Time: O(N)
+Space: O(1) if the string uses ASCII codes.
+Space: O(M) when we use custom alphabets, we must store the alphabets in an array, where M is size of the alphabet array. Notice that ASCII code is also stored somewhere, but we can exclude them from space complexity as they are not defined inside the algorithm :).
+
+Code:
+
+using namespace std;
+
+char shift(char c, int key)
+{
+	if(c+key <= 122)
+	{
+		 return c + key; // The shift does not wrap around.
+	}
+	else // greater than 122.
+	{
+		return shift('a',c + key - 123); // The shift must wrap around.
+	}
+}
+
+string caesarCypherEncryptor(string str, int key) {
+	for(int i = 0; i < str.length(); i++)
+	{
+		str[i] = shift(str[i],key);
+	}
+	return str;
+}

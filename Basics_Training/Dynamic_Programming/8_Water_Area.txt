@@ -1,0 +1,37 @@
+Question: Water Area
+
+You are given an array of integers. Each non-zero integer represents the height of a pillar of width 1. Imagine water being poured over all of the pillars and return the surface area of the water trapped between the pillars viewed from the front. Note that spilled water should be ignored. Refer to the first minute of the video explanation below for a visual example.
+
+--------------------------------------------- IDEA ---------------------------------------------
+
+
+------------------------------------------------------------------------------------------------
+--------------------------------------------- CODE ----------------------------------------------
+#include <vector>
+using namespace std;
+
+int waterArea(vector<int> heights) {
+  vector<int> water(heights.size(),0);
+	int sum = 0;
+	for(int i = 0; i < heights.size(); i++)
+	{
+			int right_max_height = 0;
+			int left_max_height = 0;
+			int left = i - 1;
+			int right = i + 1;
+			while(left >= 0)
+			{
+				if(heights[left] > left_max_height) left_max_height = heights[left];
+				left --;
+			}
+			while(right < heights.size())
+			{
+				if(heights[right] > right_max_height) right_max_height = heights[right];
+				right++;
+			}
+		if(min(left_max_height,right_max_height) - heights[i] > 0) water[i] = min(left_max_height,right_max_height) - heights[i];
+		sum += water[i];
+	}
+  return sum;
+}
+--------------------------------------------------------------------------------------------------------------

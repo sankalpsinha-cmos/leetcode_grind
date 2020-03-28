@@ -1,0 +1,37 @@
+Question: Group Anagrams
+
+Write a function that takes in an array of strings and returns a list of groups of anagrams. Anagrams are strings made up of exactly the same letters, where order doesn't matter. For example, "cinema" and "iceman" are anagrams; similarly, "foo" and "ofo" are anagrams. Note that the groups of anagrams don't need to be ordered in any particular way.
+
+Sample Input: ["yo","act","flop","tac","cat","oy","olfp"]
+Sample Output: [["yo","oy"],["flop","olfp"],["act","tac","cat"]]
+
+-----------------------
+
+
+
+
+
+--------------------------------- CODE -----------------------------------------
+#include <vector>
+#include <map>
+#include <algorithm>
+using namespace std;
+
+vector<vector<string>> groupAnagrams(vector<string> words) {
+	map<string,vector<string>> ans;
+	for(int i = 0; i < words.size(); i++)
+	{
+		string temp = words[i];
+		sort(temp.begin(),temp.end());
+		auto itr = ans.find(temp);
+		if(itr != ans.end()) itr->second.push_back(words[i]);
+		else ans.insert({temp,vector<string> {words[i]}});
+	}
+	vector<vector<string>> aans;
+	for(auto i = ans.begin(); i != ans.end(); i++)
+	{
+		aans.push_back(i->second);
+	}
+	return aans;
+}
+--------------------------------------------------------------------------------

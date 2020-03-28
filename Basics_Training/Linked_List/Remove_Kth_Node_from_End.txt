@@ -1,0 +1,58 @@
+Question: Remove the Kth node from the end of the linked list.
+
+Write a function that takes in the head of a Singly Linked List and an integer k (assume that the list has at least k nodes). The function should remove the kth node from the end of the list. Note that every node in the Singly Linked List has a "value" property storing its value as well as a "next" property pointing to the next node in the list or None (null) if it is the tail of the list.
+
+Sample Input: 0->1->2->3->4->5->6->7->8->9, 4
+Sample Output: 0->1->2->3->4->5->7->8->9
+
+------------------------------------------------- Best Solution ------------------------------------------------------
+Use two pointers first and second.
+1: Move the first pointer 'k' steps ahead of the second pointer. After the move if the first pointer points to nullptr then we have to delete the head of the liked list. So this is an edge case.
+2: If the first pointer does not point to nullptr then move both the second and the first pointer one by one till the first pointer reaches nullptr.
+3: Now delete the required node.
+
+Time: O(N) - As we traverse the list once.
+Space: O(1) - As we only need some local variables.
+
+Note: This problem is about precise traversal of the linked list.
+
+---------------------------------------------------------- CODE --------------------------------------------------------
+
+#include <vector>
+using namespace std;
+
+class LinkedList {
+  public:
+    int value;
+    LinkedList* next;
+
+    LinkedList(int value);
+    void addMany(vector<int> values);
+    vector<int> getNodesInArray();
+};
+
+void removeKthNodeFromEnd(LinkedList* head, int k) {
+	LinkedList *first = head;
+	LinkedList *second = head;
+	while(k > 0)
+	{
+		k--;
+		first = first->next;
+	}
+	if(first == nullptr)
+	{
+		head->value = head->next->value;
+		head->next = head->next->next;
+	}
+	else
+	{
+		while(first->next != nullptr) // This allows us to be one node behind the required node. This way we dont need a pptr pointer.
+		{
+			first = first->next;
+			second = second->next;
+		}
+		second->next = second->next->next;
+	}
+}
+
+----------------------------------------------------------------------------------------------------------------------------------

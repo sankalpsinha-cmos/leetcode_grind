@@ -1,0 +1,107 @@
+Question: Build a binary min heap and support the following functions on it: buildheap, insert,remove and peek.
+
+What is a heap?
+A heap is a speical type of binary tree that has the following properties:
+1: The binary heap is a complete tree, this means that all the levels except possibly the last level of the tree is completely filled.
+2: If the last level isnt filled then the elements in the tree are as far left of the tree as possible.
+
+Heap as an array: The best part about an almost complete binary tree is that it can be expressed as an array in the following way:
+1: Left_Child_Index(index) = 2*index + 1;
+2: Right_Child_Index(index) = 2*index + 2;
+3: Parent_Index(index) = (index - 1) / 2;
+
+So:         1
+           / \
+          2   3     ====> [1,2,3,4,5]
+        /   \
+       4     5
+
+What is min heap?
+A heap such that the parent of each node has a lesser value than the node.
+
+ANALYSIS:
+INSERT: [O(logN)]
+
+1: We add the new element at the end of the array.
+2: The element is then bubbled up to its right place.
+3: This bubbling up takes O(logN) [height of the tree] time. 'siftUp' is the function we call for this.
+
+PEEK: [O(1)]
+
+1: We simply return the top element of the heap.
+
+REMOVE: [O(logN)]
+
+1: We replace the top element in the heap with the last element.
+2: We then bubble down this element to its right position.
+3: This will take O(logN) [height of the tree] time. 'siftDown' is the function we call for this.
+
+BUILD HEAP: [O(N)] If we use the siftDown function. O[NlogN] if we use the siftUp method. Generally O[N].
+
+1: To build the heap we call the siftDown method on all the non leaf nodes of the heap, starting from the lowest non-leaf node up to the root node. The lowest-non-leaf node is given by: 'heap.size()/2 - 1'
+2: Why does it take O(N) time? The intuition behind this is that, in a complete binary tree with n nodes almost n/2 nodes are at the last level and hence they are all leaf nodes, we never call siftDown on these nodes.(even if we did the function will simply return in O(1) time).
+3: For the rest of the n/2 nodes, Firstly they are not all on the same level. This equation sums up the time taken by this function: sum(level of the lnln to 0)[log(l)*2^(l-1)] = O[N]. Read the Gate Notes for the proof.
+
+----------------------------------------------------- CODE --------------------------------------------------------------------
+
+#include <vector>
+using namespace std;
+
+class MinHeap {
+  public:
+    vector<int> heap;
+
+    MinHeap(vector<int> vector) {
+      heap = buildHeap(&vector);
+    }
+
+    vector<int> buildHeap(vector<int>* vector) {
+      int lnln = vector->size()/2 - 1;
+			for(int i = lnln; i>=0; i--)
+			{
+				siftDown(i,vector->size()-1,vector);
+			}
+			return *vector;
+    }
+
+    void siftDown(int currentIdx, int endIdx, vector<int>* heap) {
+      int lc = 2*currentIdx + 1;
+			int rc = 2*currentIdx + 2;
+			int smallest = currentIdx;
+			if(lc <= endIdx && heap->at(lc) < heap->at(smallest)) smallest = lc;
+			if(rc <= endIdx && heap->at(rc) < heap->at(smallest)) smallest = rc;
+			if(smallest != currentIdx)
+			{
+				swap(heap->at(smallest),heap->at(currentIdx));
+				siftDown(smallest,endIdx,heap);
+			}
+    }
+
+    void siftUp(int currentIdx, vector<int>* heap) {
+      int parent = (currentIdx - 1)/2;
+			while(parent >= 0 && heap->at(parent) > heap->at(currentIdx))
+			{
+				swap(heap->at(parent),heap->at(currentIdx));
+				currentIdx = parent;
+				parent = (currentIdx - 1)/2;
+			}
+    }
+
+    int peek() {
+			if(heap.size() == 0)return -1;
+      return heap[0];
+    }
+
+    int remove() {
+      int data = heap[0];
+			heap[0] = heap[heap.size()-1];
+			heap.pop_back();
+			siftDown(0,heap.size()-1,&heap);
+			return data;
+    }
+
+    void insert(int value) {
+      heap.push_back(value);
+			siftUp(heap.size()-1,&heap);
+    }
+};

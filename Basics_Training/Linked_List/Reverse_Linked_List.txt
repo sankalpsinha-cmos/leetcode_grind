@@ -1,0 +1,58 @@
+Question: Reverse a linkedlist given it's head.
+
+Write a function that takes in the head of a Singly Linked List (assume that the list has at least 1 node; in other words, the head will never be a null value). The function should reverse the list and return its new head. Note that every node in the Singly Linked List has a "value" property storing its value as well as a "next" property pointing to the next node in the list or None (null) if it is the tail of the list.
+
+Sample Input:0->1->2->3->4->5(the head is 0)
+Sample Output: 5->4->3->2->1->0(the head is 5)
+
+-------------------------------------------------- The Three Pointer Approach -------------------------------------------------------
+Take 3 pointers, initialized as follows:
+a: pptr = nullptr;
+b: ptr = head;
+c: nptr = head->next;
+
+Now do the following:
+1: While(nptr != nullptr){
+    ptr->next = pptr;
+    pptr = ptr;
+    ptr = nptr;
+    nptr = ntrp->next;
+}
+2: Once the loop exits do:
+ptr->next = pptr;
+head = ptr;
+return ptr;
+
+Time: O(N)
+Space: O(1)
+
+Code:
+
+using namespace std;
+
+class LinkedList {
+  public:
+    int value;
+    LinkedList* next;
+
+    LinkedList(int value) {
+      this->value = value;
+    }
+};
+
+LinkedList* reverseLinkedList(LinkedList* head) {
+  LinkedList *pptr = nullptr;
+  LinkedList *ptr = head;
+  LinkedList *nptr = ptr->next;
+	while(nptr != nullptr)
+	{
+		ptr->next = pptr;
+		pptr = ptr;
+		ptr = nptr;
+		nptr = nptr->next;
+	}
+  ptr->next = pptr;
+  head = ptr;
+  return head;
+}
+------------------------------------------------------------------------------------------------------------------------------------------

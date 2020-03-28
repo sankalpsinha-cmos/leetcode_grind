@@ -1,0 +1,61 @@
+Question: Min-Max Stack Implementation
+
+Write a Min Max Stack class. The class should support pushing and popping values on and off the stack, peeking at values at the top of the stack, and getting both the minimum and the maximum values in the stack. All class methods, when considered independently, should run in constant time and with constant space.
+
+----------------------- LOGIC -----------------------
+1: In a stack Insert, Peek and Pop already take O(1) time.
+2: But getMin or getMax will not take O(1) in a simple stack.
+3: So we keep two stacks 'min' and 'max' that keep track of the current min and max values.
+4: Now getMin and getMax can run in O(1) time.
+
+----------------------- CODE ------------------------
+
+#include<stack>
+using namespace std;
+
+// Feel free to add new properties and methods to the class.
+class MinMaxStack {
+	public:
+	stack<int> s;
+	stack<int> min;
+	stack<int> max;
+
+  int peek() {
+    if(!s.empty()) return s.top();
+  }
+
+  int pop() {
+		int data;
+    if(!s.empty())
+		{
+			data = s.top();
+			s.pop();
+			min.pop();
+			max.pop();
+		}
+		return data;
+  }
+
+  void push(int number) {
+		if(s.empty() && min.empty() && max.empty())
+		{
+			s.push(number);
+			min.push(number);
+			max.push(number);
+		}
+		else
+		{
+			s.push(number);
+			number < min.top()?min.push(number):min.push(min.top());
+			number > max.top()?max.push(number):max.push(max.top());
+		}
+  }
+
+  int getMin() {
+		if(!min.empty()) return min.top();
+  }
+
+  int getMax() {
+    if(!min.empty()) return max.top();
+  }
+};

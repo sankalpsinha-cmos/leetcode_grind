@@ -1,0 +1,91 @@
+Question: Find all triplets in a given unsorted array with all distinct number, that sum up to the a given target sum. Return a 2D array with all these triplets.
+Also the elements of the triplets must be sorted.
+
+Sample Input: [12,3,1,2,-6,5,-8,6] target = 0;
+Sample Output: [[-8,2,6],[-8,3,5],[-6,1,5]]
+
+-------------------------- NAIVE SOLUTION ---------------------------------
+Take 3 for loops.
+1:  loop 1: (i=0 to N-1)
+    loop 2: (j=i+1 to N-1)
+    loop 3: (k=j+1 to N-1)
+
+2:  Now check if(a[i] + a[j] + a[k] == target). If yes return the triplet [a[i],a[j],[k]] such that they are sorted.
+
+Time: O(N^3)
+Space: O(1)
+
+------------------------ BEST SOLUTION -------------------------------------
+1: Sort the array in ascending order.
+2: Traverse the array with a pointer 'i'.
+3: Assign two pointers: j = i + 1 and k = array.size() - 1. And while (j < k) do 4 or 5 or 6.
+4: Now if a[i] + a[j] + a[k] > target. then k--;
+5: Now if a[i] + a[j] + a[k] < target. then j++;
+6: Now if a[i] + a[j] + a[k] == target. Then we have found a triplet. Also do k-- and j++.
+
+Time: O(NlogN + N^2) = O(N^2) - As sorting takes O(NlogN) and the two pointer approach takes O(N^2) time
+Space: O(logN) - Depends on the sorting algorithm used like: QuickSort.
+------------------------- CODE ----------------------------------------
+#include <vector>
+using namespace std;
+
+int partition(vector<int> *array, int low, int high)
+{
+  int piviot = high;
+	int i = low;
+	int j = low - 1;
+	for(;i < high; i++)
+	{
+		if(array->at(i) < array->at(piviot))
+		{
+			swap(array->at(++j),array->at(i));
+		}
+	}
+	swap(array->at(++j),array->at(high));
+	return j;
+}
+
+void qs(vector<int> *array, int low, int high)
+{
+	if(low < high)
+	{
+		int piviot_index = partition(array,low,high);
+
+		qs(array,low,piviot_index -1);
+		qs(array,piviot_index + 1, high);
+	}
+}
+
+vector<vector<int> > threeNumberSum(vector<int> array, int targetSum) {
+	vector<vector<int>> ans;
+	qs(&array,0,array.size()-1);
+	for(int i = 0; i < array.size(); i++)
+	{
+		int current = array.at(i);
+		int left = i+1;
+		int right = array.size()-1;
+		while(left < array.size() && right < array.size() && left < right)
+		{
+			vector<int> triplet;
+			if(current + array.at(left) + array.at(right) == targetSum)
+			{
+				triplet.push_back(current);
+				triplet.push_back(array.at(left));
+				triplet.push_back(array.at(right));
+				ans.push_back(triplet);
+				left++;
+				right--;
+			}
+			else if(current + array.at(left) + array.at(right) > targetSum)
+			{
+				right--;
+			}
+			else
+			{
+				left++;
+			}
+		}
+	}
+	return ans;
+}
+--------------------------------------------------------------------------------

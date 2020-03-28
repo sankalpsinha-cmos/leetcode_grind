@@ -1,0 +1,234 @@
+Question: Calculate the median of numbers continuously
+
+Write a class that can support the following two functions:
+1: The continuous insertion of numbers.
+2: The instant O(1) time calculation of the median of the numbers that have been inserted thus far.
+
+Note: Here are are inserting a number and then immediately calculating the median so the time complexity of the insertion is also taken into account.
+
+----------------------- The Naive Idea --------------------
+1: maintain a sorted arrangement of the numbers.
+2: insert each new number at its correct position in O(N) time by simple traversal or O(logN) using binary search.
+3: Now find the median using:
+  a: If the size is odd return the middle element.
+  b: If the size is odd return the average of the two middle elements.
+
+Time: O(N) - As it will take us O(logN) time to find the right place for element in the sorted array, then at worst O(N) shifts/swaps to insert it into its right position.
+Space: O(N) - As we maintain a sorted arrangement of the numbers.
+-----------------------------------------------------------
+---------------------- The Best Idea ----------------------
+Use of two heaps, a min heap and a max heap.
+
+1: Maintain two heaps
+  a: A min-heap called greater_half.
+  b: A max-heap called lower_half.
+
+2: The logic for Insertion of numbers:
+  a: If the lower_half is empty. Add the number into the lower_half heap.
+  b: If the number is greater than the top of the lower_half heap then add the number to the greater_half heap.
+  c: If the number is smaller than the top of the lower_half heap then add the number to the lower_half heap.
+  d: The re-balancing: The two heaps cant differ by more than 1 in their sizes, if they do we must re-balance.
+    i: Check the sizes of the two heaps. If they differ by more than 1 then do as follows:
+    ii: If the lower_half heap is greater in size then pop the top element from it and add it to the greater_half heap.
+    iii: If the greater_half heap is greater in size then pop the top element from it and add it to the lower_half heap.
+
+3: The logic for getMedian:
+  a: If the two heaps have equal size then return the average of the elements at the top of two heaps.
+  b: If the two heaps are unequal in size then simply return the element at the top of the heap with the larger size.
+
+Time: O(logN/2) = O(logN) to insert the element into the heap or O(logN + logN) = O(logN) to re-balance the heaps.
+Space: O(N) to store the two heaps.
+
+
+
+---------------------------- Code ------------------------
+
+#include<vector>
+using namespace std;
+
+// The MAX HEAP Class
+class MaxHeap{
+private:
+vector<int> heap;
+
+public:
+  bool is_Empty()
+  {
+    if(heap.size() != 0)return false;
+    return true;
+  }
+
+  void siftDown(int index, int end, vector<int> *heap)
+  {
+    int lc = 2*index + 1;
+    int rc = 2*index + 2;
+    int largest = index;
+    if(lc <= end && heap->at(lc) > heap->at(largest)) largest = lc;
+    if(rc <= end && heap->at(rc) > heap->at(largest)) largest = rc;
+    if(largest != index)
+    {
+      swap(heap->at(index),heap->at(largest));
+      siftDown(largest,end,heap);
+    }
+  }
+
+  void siftUp(int index, vector<int> *heap)
+  {
+    int parent = (index - 1)/2;
+    while(parent >= 0 && heap->at(index) > heap->at(parent))
+    {
+      swap(heap->at(index),heap->at(parent));
+      index = parent;
+      parent = (index - 1)/2;
+    }
+  }
+
+  int peek()
+  {
+    if(!heap.empty()) return heap.at(0);
+    return -9999;
+  }
+
+  int size()
+  {
+    return heap.size();
+  }
+
+  void insert(int data)
+  {
+    heap.push_back(data);
+    siftUp(heap.size()-1,&heap);
+  }
+
+  int remove()
+  {
+    if(!heap.empty())
+    {
+      int data = heap.at(0);
+      heap.at(0) = heap.at(heap.size()-1);
+      heap.pop_back();
+      siftDown(0,heap.size()-1,&heap);
+      return data;
+    }
+    return -9999;
+  }
+
+};
+
+// The MIN HEAP Class
+class MinHeap{
+private:
+vector<int> heap;
+
+public:
+  bool is_Empty()
+  {
+    if(heap.size() != 0)return false;
+    return true;
+  }
+
+  void siftDown(int index, int end, vector<int> *heap)
+  {
+    int lc = 2*index + 1;
+    int rc = 2*index + 2;
+    int smallest = index;
+    if(lc <= end && heap->at(lc) < heap->at(smallest)) smallest = lc;
+    if(rc <= end && heap->at(rc) < heap->at(smallest)) smallest = rc;
+    if(smallest != index)
+    {
+      swap(heap->at(index),heap->at(smallest));
+      siftDown(smallest,end,heap);
+    }
+  }
+
+  void siftUp(int index, vector<int> *heap)
+  {
+    int parent = (index - 1)/2;
+    while(parent >= 0 && heap->at(index) < heap->at(parent))
+    {
+      swap(heap->at(index),heap->at(parent));
+      index = parent;
+      parent = (index - 1)/2;
+    }
+  }
+
+  int peek()
+  {
+    if(!heap.empty()) return heap.at(0);
+    return -9999;
+  }
+
+  int size()
+  {
+    return heap.size();
+  }
+
+  void insert(int data)
+  {
+    heap.push_back(data);
+    siftUp(heap.size()-1,&heap);
+  }
+
+  int remove()
+  {
+    if(!heap.empty())
+    {
+      int data = heap.at(0);
+      heap.at(0) = heap.at(heap.size()-1);
+      heap.pop_back();
+      siftDown(0,heap.size()-1,&heap);
+      return data;
+    }
+    return -9999;
+  }
+};
+
+
+// Do not edit the class below except for
+// the insert method. Feel free to add new
+// properties and methods to the class.
+class ContinuousMedianHandler {
+  public:
+    double median;
+		MinHeap greater_half;
+  	MaxHeap lower_half;
+
+    void insert(int number) {
+			if(lower_half.is_Empty()) lower_half.insert(number);
+    	else if(number > lower_half.peek()) greater_half.insert(number);
+    	else lower_half.insert(number);
+
+    	int lower_half_size = lower_half.size();
+    	int greater_half_size = greater_half.size();
+    	if(abs(lower_half_size - greater_half_size) > 1)
+    	{
+      	if(lower_half_size > greater_half_size)
+      	{
+        	greater_half.insert(lower_half.remove());
+      	}
+      	else
+      	{
+        	lower_half.insert(greater_half.remove());
+      	}
+    	}
+    }
+
+    double getMedian() {
+			int lower_half_size = lower_half.size();
+    	int greater_half_size = greater_half.size();
+
+    	if(lower_half_size == greater_half_size)
+    	{
+      	median = (double)(lower_half.peek() + greater_half.peek())/2;
+    	}
+    	else if(lower_half_size > greater_half_size)
+    	{
+      	median = lower_half.peek();
+    	}
+    	else
+    	{
+      	median = greater_half.peek();
+    	}
+      return median;
+    }
+};

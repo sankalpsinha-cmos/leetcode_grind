@@ -1,0 +1,120 @@
+Question: Minimum Rewards
+
+Imagine that you're a teacher who's just graded the final exam in a class. You have a list of student scores on the final exam in a particular order (not necessarily sorted), and you want to reward your students. You decide to do so fairly by giving them arbitrary rewards following two rules: first, all students must receive at least one reward; second, any given student must receive strictly more rewards than an adjacent student (a student immediately to the left or to the right) with a lower score and must receive strictly fewer rewards than an adjacent student with a higher score. Assume that all students have different scores; in other words, the scores are all unique. Write a function that takes in a list of scores and returns the minimum number of rewards that you must give out to students, all the while satisfying the two rules.
+
+Sample Input: [8,4,2,1,3,6,7,9,5]
+Sample Output: 25
+Although we do not return the rewards array, internally it will be: [4,3,2,1,2,3,4,5,1]
+
+Note:
+  1: You can't just sort the given array, because that defeats the whole purpose of the question. The question asks you to find the minimum no of rewards needed for a given arrangement of marks. Sorting destroys this arrangement so DO NOT SORT!!
+  2: Having duplicate marks is also a big issue ask the interviewer if you can have duplicate marks. For our case we assume unique marks.
+  3: The rules are in case u didn't understand:
+    a: Every student must receive at least 1 reward.
+    b: any given student must receive strictly more rewards than an adjacent student (a student immediately to the left or to the right) with a lower score and must receive strictly fewer rewards than an adjacent student with a higher score.
+
+     Eg: Say there are 3 students with the marks: 5,4,3. Now the student with 4 marks must get strictly less reward than the student with 5 marks (to its left). Also he should get strictly more marks than the student with 3 marks (to its right). This logic should hold true for all students.
+
+--------------------------------------- NAIVE LOGIC ----------------------------
+1: Say the input is : [8,4,2,1,3,6,7,9,5]
+3: Make an array that stores the rewards for all the students.
+3: Give the first student a reward of 1.
+4: Start to traverse the marks array from the 2nd student onwards and do:
+  a: If marks[i] < marks[i-1] Then assign reward[i] = 1 and do:
+    i: Run a for loop from i-1 to 0 and do: reward[i-1] = max(reward[i],reward[i+1] + 1).
+  b: If the marks[i] > marks[i-1] Then do reward[i+1] = reward[i] + 1.
+5: After we have traversed the marks array completely we just return the sum of all the numbers in the awards array.
+
+Time: O(N^2) - In worst case for every student we have to traverse back to the first student to fix his award. For example take the case of [9,8,7,6,5,4,3,2,1]. We go back 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 = 36 times. Generally for n elements in worst case we go back (n-1)n/2 = O(N^2).
+Space - O(N) - To Store the rewards array. The rest is just constant variables.
+--------------------------------------- NAIVE CODE -----------------------------
+#include <vector>
+using namespace std;
+
+int minRewards(vector<int> scores) {
+	if(scores.size() == 1)return 1;
+	int sum = 0;
+  vector<int> rewards(scores.size(), 1);
+
+	for(int i = 1; i < scores.size(); i++)
+	{
+		if(scores[i-1] > scores[i])
+		{
+			rewards[i] = 1;
+			int j = i - 1;
+			while(j >= 0 && scores[j] > scores[j+1])
+			{
+				rewards[j] = max(rewards[j],rewards[j+1] + 1);
+				j--;
+			}
+		}
+		else
+		{
+			rewards[i] = rewards[i-1] + 1;
+		}
+	}
+	for(int i = 0; i < rewards.size(); i++) sum = sum + rewards[i];
+	return sum;
+}
+--------------------------------------------------------------------------------
+----------------------------- GOOD APPROACH ------------------------------------
+Idea:
+If we look carefully at the input arrays from left to right we can find that there are local minima and local maxima.
+
+Also notice that a local minima will always be given 1 reward(or whatever is the least possible). See 1 is a local minima in scores and the
+corresponding reward in 1. Similarly 5 is a local minima in scores and the corresponding reward is 1.
+
+Eg: Input: Scores:    [8,4,2,1,3,6,7,9,5]
+    Output: Rewards:  [4,3,2,1,2,3,4,5,1]
+
+Further notice that the rewards linearly increase both in the left and right directions away from the reward for the local minima.
+Eg: 4,3,2,1,2,3,4
+
+Now we can find all the local minima in the scores array and expand to the left and right till be arrive at a local maxima like 8 on left side and 9 on the right.
+
+While expanding right we simply do if(s[right] > s[right-1]) reward[right] = reward[right-1] + 1;
+While expanding left we simply do if(s[left] > s[left-1]) reward[left] = max(reward[left],reward[left-1]+1);
+
+Time: O(N) - First we find all the minima in the array in one pass so O(N) time. Second we expand from each local minima and go left and right hence we essentially we will go over each element once more. So a total of 2 times which is O(2N) = O(N).
+Space: O(N) - As we maintain a rewards array.
+
+---------------------------- BEST APPROACH -------------------------------------
+This is a difficult thing to notice but we do not need to expand from each local minima. Actually the code implementation of expanding from minima is tricky and mistakes can easily be made.
+
+Just apply this logic:
+1: Initialise the rewards array with all 1s.
+1: Start from the left side of the array and do this till u reach the right end:
+  a: If s[i] > s[i-1] then r[i] = r[i-1] + 1;
+2 Now start from the right side of the array and do this till u reach the left end:
+  a: If s[i] > s[i-1] then r[i] = max(r[i],r[i-1] + 1);
+3: You will have the answer.
+
+Time: O(N) - As we make 2 passes through the array one from left to right and other from right to left.
+Space: O(N) - As we maintain a rewards array.
+
+Why is this best approach if the good and best approach have the same time and space complexity?
+This approach is mush simpler to implement.
+
+---------------------------- CODE BEST APPROACH --------------------------------
+#include <vector>
+using namespace std;
+
+int minRewards(vector<int> scores) {
+	int rewards[scores.size()];
+	for(int i = 0; i < scores.size(); i++)rewards[i]=1;
+	int sum = 0;
+	for(int i = 1; i < scores.size(); i++)
+	{
+		if(scores[i-1] < scores[i]) rewards[i] = rewards[i-1] + 1;
+	}
+	for(int i = scores.size()-2; i >= 0; i--)
+	{
+		if(scores[i] > scores[i+1]) rewards[i] = max(rewards[i], rewards[i+1] + 1);
+	}
+	for(int i = 0; i < scores.size(); i++)
+	{
+		sum = sum + rewards[i];
+	}
+	return sum;
+}
+--------------------------------------------------------------------------------

@@ -1,0 +1,55 @@
+Question: The Four Number Sum Problem
+
+
+Write a function that takes in a non-empty array of distinct integers and an integer representing a target sum. The function should find all quadruplets in the array that sum up to the target sum and return a two-dimensional array of all these quadruplets in no particular order. If no four numbers sum up to the target sum, the function should return an empty array.
+
+Sample Input: [7,6,4,-1,1,2],16
+Sample Output: [[7,6,4,-1],[7,6,1,2]]
+
+------------------------------ THE AMAZING IDEA --------------------------------
+The two number, three number and now four number sum problems have very interesting solutions.
+
+
+
+---------------------------------- CODE ----------------------------------------
+#include <vector>
+#include <unordered_map>
+#include <algorithm> // Add this otherwise u will have compilation error in AE.
+using namespace std;
+
+vector<vector<int>> fourNumberSum(vector<int> array, int targetSum) {
+  unordered_map<int,vector<vector<int>>> m;
+	vector<vector<int>> ans;
+
+	for(int i = 0; i < array.size(); i++)
+	{
+		for(int j = i+1; j < array.size(); j++)
+		{
+			auto itr = m.find(targetSum - (array[i] + array[j]));
+			if(itr != m.end())
+			{
+				for(int k = 0; k < itr->second.size(); k++)
+				{
+					ans.push_back(vector<int>{array[i],array[j],itr->second[k][0],itr->second[k][1]});
+				}
+			}
+		}
+
+		for(int k = i-1; k >=0; k--)
+		{
+			auto itr = m.find((array[i] + array[k]));
+			if(itr == m.end())
+			{
+				vector<vector<int>> pairs;
+				pairs.push_back(vector<int>{array[i],array[k]});
+				m.insert({array[i] + array[k],pairs});
+			}
+			else
+			{
+				itr->second.push_back(vector<int>{array[i],array[k]});
+			}
+		}
+	}
+	return ans;
+}
+--------------------------------------------------------------------------------

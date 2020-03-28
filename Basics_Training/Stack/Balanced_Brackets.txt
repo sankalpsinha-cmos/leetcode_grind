@@ -1,0 +1,39 @@
+Question: Balanced Brackets
+
+Write a function that takes in a string made up of brackets ("(", "[", "{", ")", "]", and "}") and other optional characters. The function should return a boolean representing whether or not the string is balanced in regards to brackets. A string is said to be balanced if it has as many opening brackets of a given type as it has closing brackets of that type and if no bracket is unmatched. Note that a closing bracket cannot match a corresponding opening bracket that comes after it. Similarly, brackets cannot overlap each other as in "[(])".
+
+Sample input: "([])(){}(())()()"
+Sample output: True
+
+--------------------------------------- Stack ----------------------------------------------------------------------
+Use a stack.
+1: Start reading the string left to write, for each character in the string do 2, 3 and 4:
+2: If the stack is empty push the character onto the stack.
+3: If character is opening bracket then push onto stack.
+4: If character is closing bracket and the top of the stack is the matching closing bracket then pop a character form the stack. Else push it onto stack.
+5: Once out of the loop check if the stack is empty. If yes then return true else false.
+
+Time: O(N) - As we scan the string once.
+Space: O(N) - As we have a stack that can have all the characters of the string by the end.
+
+Code:
+
+#include<stack>
+using namespace std;
+
+bool balancedBrackets(string str) {
+  stack<int> s;
+	for(int i = 0; i < str.length(); i++)
+	{
+		if(s.empty()) s.push(str[i]);
+		else
+		{
+			if(str[i] == ')' && s.top() == '(') s.pop();
+			else if(str[i] == '}' && s.top() == '{') s.pop();
+			else if(str[i] == ']' && s.top() == '[') s.pop();
+			else s.push(str[i]);
+		}
+	}
+	if(s.empty()) return true;
+	return false;
+}

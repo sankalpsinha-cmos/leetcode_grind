@@ -1,0 +1,57 @@
+Question: Two Number Sum
+
+Write a function that takes in a non-empty array of distinct integers and an integer representing a target sum. If any two numbers in the input array sum up to the target sum, the function should return them in an array, in sorted order. If no two numbers sum up to the target sum, the function should return an empty array. Assume that there will be at most one pair of numbers summing up to the target sum.
+
+Sample Input: [3,5,-4,8,11,1,-1,6],10
+Sample Output: [-1,11] (In sorted order)
+
+--------------------------------- Naive Solution -------------------------------
+Use two for loops and check all possible pair of numbers and their sum. Return the pair that sums up to the target value.
+
+Time: O(n^2)
+Space: O(1)
+-----------------------------------Better Idea----------------------------------
+Better Idea: Sort the array in increasing order. Then take two pointers, one on the first element in the sorted array and the other on the last element of the sorted array. Move pointers using the following rules
+
+1: If the sum is smaller than the target then move left pointer forward.
+2: If the sum is larger than the target then move the right pointer backwards.
+Why? Think it's obvious! Do this till the pointers meet.
+
+TC: O(nlogn + n) = O(nlogn) - nlogn for sort and n for two pointer traversal.
+SC: O(logn) (Quicksort with tail recursion is eliminated) else O(n) for standard implementation of quicksort.
+------------------------------------Best Idea-----------------------------------
+Best Idea: Use a hash table (unordered_set in C++).
+
+We are essentially solving the equation x + y = target => x = target - y
+So traverse the array and for every x check if its pair (target - y) is the hash map. If not push x into the hash map. If present then we have found a pair, add it to the ans array in sorted order.
+
+TC: O(n) - As we traverse the array once and at each step we do a simple hash lookup.
+SC: O(n) - To maintain the hash map.
+
+--------------------------------- CODE -----------------------------------------
+vector<int> twoNumberSum(vector<int> array, int targetSum) {
+	unordered_set<int> hash;
+	vector<int> ans;
+	for(int i = 0; i < array.size(); i++)
+	{
+		unordered_set<int>::iterator it = hash.find(targetSum - array[i]);
+		if(it == hash.end())
+		{
+			hash.insert(array[i]);
+		}
+		else
+		{
+			if(array[i] < *it)
+			{
+				ans.push_back(array[i]);
+				ans.push_back(*it);
+			}
+			else
+			{
+				ans.push_back(*it);
+				ans.push_back(array[i]);
+			}
+		}
+	}
+	return ans;
+-------------------------------- END -------------------------------------------

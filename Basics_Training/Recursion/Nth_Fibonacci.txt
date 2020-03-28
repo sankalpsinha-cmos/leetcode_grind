@@ -1,0 +1,29 @@
+Question: Nth Fibonacci
+
+The Fibonacci sequence is defined as follows: the first number of the sequence is 0, the second number is 1, and the nth number is the sum of the (n - 1)th and (n - 2)th numbers. Write a function that takes in an integer n and returns the nth Fibonacci number.
+
+fib(0) = 0
+fib(1) = 1
+
+Sample Input: 6
+Sample Output: 5
+
+---------------------------------- Naive Solution ------------------------------
+Use the recursive equation:
+      fib(n) = fib(n-2) + fib(n-1)
+
+TC: O(2^n) - As the depth of the recursion tree will be n, and for a almost full binary tree the no of nodes in a tree of height n is 2^(n+1) - 1 = O(2^n).
+SC: O(n) - As the stack height reaches n.
+
+CODE:
+
+int getNthFib(int n) {
+  if(n == 1)return 0;
+	if(n == 2)return 1;
+	if(n > 2)
+	{
+		return(getNthFib(n-2) + getNthFib(n-1));
+	}
+	return -1;
+}
+--------------------------------------------------------------------------------
