@@ -1,15 +1,15 @@
-Question: QuickSelect
+# QuickSelect
 
 Write a function that takes in an array of distinct integers as well as an integer k and returns the kth smallest number in that array in linear time, on average. The array could be sorted, but isn't necessarily so.
-
+```
 Sample Input: [8,5,2,9,7,6,3],3
 Sample Output: 5
------------------------------ THE CORE IDEA ------------------------------------
+```
+### THE CORE IDEA
 
 
 
-
----------------------------------- CODE ----------------------------------------
+```C++
 #include <vector>
 using namespace std;
 
@@ -40,4 +40,4 @@ int quickselect(vector<int> array, int k) {
 	}
 	return array[k-1];
 }
---------------------------------------------------------------------------------
+```

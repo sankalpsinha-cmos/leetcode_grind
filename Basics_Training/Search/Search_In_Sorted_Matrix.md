@@ -1,9 +1,11 @@
-Question: Search in a sorted matrix.
-
+# Search in a sorted matrix.
+```
 You are given a two-dimensional array (matrix) of distinct integers where each row is sorted and each column is also sorted. The matrix does not necessarily have the same height and width. You are also given a target number, and you must write a function that returns an array of the row and column indices of the target number if it is contained in the matrix and [-1, -1] if it is not contained in the matrix.
-
+```
+```
 Notice: In a sorted matrix the rows are sorted in ascending order form left to right. While the columns are sorted in ascending order from top to bottom.
-
+```
+```
 Sample Input:
 [
 [1,4,7,12,15,1000],
@@ -16,12 +18,13 @@ Sample Input:
 Note: In this sample input the matrix has a size of 6x6. But that need not be the case always, generally the size can be M x N.
 
 Sample Output: [3,3]
-
--------------------------------- BEST IDEA -------------------------------------
-1: Set a variable called row = 0.
-2: Set a variable called col = matrix[row].size() - 1.
-3: While(col >= 0 && row < matrix.size()) do:
-  a: If(target > matrix[row][col])
+```
+### BEST IDEA
+1. Set a variable called row = 0.
+2. Set a variable called col = matrix[row].size() - 1.
+```
+3. While(col >= 0 && row < matrix.size()) do:
+	1. If(target > matrix[row][col])
       {
         row++;
         col = matrix[row].size()-1;
@@ -31,9 +34,10 @@ Sample Output: [3,3]
       col--;
       }
   c: If(target == matrix[row][col]) return vector<int>{row,col};
+```
 4: return vector<int>{-1,-1};
 
---------------------------------- CODE -----------------------------------------
+```C++
 #include <vector>
 using namespace std;
 
@@ -54,4 +58,4 @@ vector<int> searchInSortedMatrix(vector<vector<int> > matrix, int target) {
 	}
 	return vector<int>{-1,-1};
 }
---------------------------------------------------------------------------------
+```

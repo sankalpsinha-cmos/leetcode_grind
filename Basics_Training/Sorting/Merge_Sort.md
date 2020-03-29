@@ -1,26 +1,34 @@
-Question: Implement Merge Sort
+# Implement Merge Sort
 
+```
 BASIC BACKGROUND:
 
 Merge Sort is a Divide and Conquer algorithm. It divides input array in two halves, calls itself for the two halves and then merges the two sorted halves. The merge() function is used for merging two halves. The merge(arr, l, m, r) is key process that assumes that arr[l..m] and arr[m+1..r] are sorted and merges the two sorted sub-arrays into one. See following C implementation for details.
-
+```
+```
 ANALYSIS:
 
 Rec Rel: T(N) = 2T(n/2) + O(N)
+
 Where 2T(N/2) comes because the array is divided into 2 smaller subproblems.
 O(N) comes from the time taken to merge to sorted arrays.
 
-Time: O(NlogN) - Time complexity of Merge Sort is Theta(nLogn) in all 3 cases (worst, average and best) as merge sort always divides the array into two halves and take linear time to merge two halves.
-Space: O(N) - Same for all cases.
+Time: O(NlogN)
 
----------------------------------------- Implementation using vector C++ STL -----------------------------------------
-Implementation using vector and STL isn't like Implementation using array. The standard way we learned in university.
+Time complexity of Merge Sort is Theta(nLogn) in all 3 cases (worst, average and best) as merge sort always divides the array into two halves and take linear time to merge two halves.
+
+Space: O(N) - Same for all cases.
+```
+### Implementation using vector C++ STL
+```
+Implementation using vector and STL isn't like Implementation using array.
+The standard way we learned in university.
 We create a copy of the original vector called temp.
 We use temp to do all the calculations and copy the results into the original array.
+
 Always remember we must pass vectors using reference between functions otherwise they will be local to the function.
-
-Code:
-
+```
+```C++
 #include <vector>
 using namespace std;
 
@@ -57,4 +65,4 @@ vector<int> mergeSort(vector<int> array) {
 	ms(&array,0,array.size()-1,&temp);
 	return array;
 }
--------------------------------------------------------------------------------------------------------------------------------------
+```

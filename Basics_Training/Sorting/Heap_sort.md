@@ -1,16 +1,24 @@
-Question: The heap sort.
-
+# The heap sort.
+```
 Implement the heap sort.
-
+```
+### The Core Idea
+1. Build a max-heap from the given array.
+2. Remove the top element and replace it with the last element in the heap.
+3. Rebalance the heap, using the siftUp method.
+4. Keep doinf 3 till the heap size is 0.
+5. Return the resulting array.
+```
 Time: O(NlogN)
+
 First we build a min heap that takes O(N) time. Then we call the remove function N times. Each time it takes O(logN) time to run hence O(NlogN + N) total time. Which is O(NlogN).
 
 Avg case = Best Case = Worst Case = O(NlongN) as in all cases we build a heap so the order of the original array has no effect on the algorithm.
 
 Space: O(1)
 As we pass the array as a reference we just use some local variables.
-
-------------------------- Code ----------------------------
+```
+```C++
 #include <vector>
 using namespace std;
 // Last 20-Nov-19 Time: 12:53 as of 12:00 Acc: Came up with best solution!!
@@ -55,4 +63,4 @@ vector<int> heapSort(vector<int> array) {
 	}
 	return array;
 }
------------------------------------------------------------
+```

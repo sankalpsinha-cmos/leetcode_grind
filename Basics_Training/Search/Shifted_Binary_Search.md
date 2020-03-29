@@ -1,27 +1,20 @@
-Question: Shifted Binary Search
-
+# Shifted Binary Search
+```
 Write a function that takes in a sorted array of integers as well as a target integer. The caveat is that the numbers in the array have been shifted by some amount; in other words, they have been moved to the left or the right by one or more positions. For example, [1, 2, 3, 4] might become [3, 4, 1, 2]. The function should use a variation of the Binary Search algorithm to find if the target number is contained in the array and should return its index if it is, otherwise -1.
-
+```
+```
 Sample Input: [45,61,71,72,73,0,1,21,33,45],33
 Sample Output: 8
-
-------------------------------- THE BEST APPROACH ------------------------------
-Notice the input array is a shifted sorted array!!
-In a shifted sorted array the point where the array loses its sorted character is called the 'infliction' point. i.e: the infliction point is at index 4 and value 73. This point in very important.
-
-1: set low = 0 and high = a.size()-1;
-2: calculate mid = (low + high)/2;
-3: check if a[mid] == target and return mid id true.
-4: if(a[low] < a[mid]). This means that the array is sorted.
-  a: if(target >= a[low] && target < a[mid]). To check if the target lies in between.
-    i:
+```
+### THE BEST APPROACH
 
 
 
-Time: O(logN) - Like normal binary search.
-Space: O(logN) if done recursively and O(1) if done iteratively.
 
----------------------------------- CODE ----------------------------------------
+* Time: O(logN) - Like normal binary search.
+* Space: O(logN) if done recursively and O(1) if done iteratively.
+
+```C++
 // This is recursive code and takes O(logN) space. Try iterative for O(1).
 #include <vector>
 using namespace std;
@@ -58,4 +51,4 @@ int shiftedBinarySearch(vector<int> array, int target) {
   int index = helper(array,0,array.size()-1,target);
 	return index;
 }
---------------------------------------------------------------------------------
+```
