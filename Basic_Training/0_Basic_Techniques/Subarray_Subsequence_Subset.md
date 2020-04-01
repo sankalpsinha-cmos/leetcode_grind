@@ -51,5 +51,27 @@ Notice that each valid sub-string is a contigeous slice of the orginal string.
 ```
 ### No of sub-strings for a string with 'N' elements: (N(N+1))/2
 ```C++
-
+// The same logic as sub-array generation.
+void generate_all_substrings(string *str, vector<string> *substrings)
+{
+	int size = 0;
+	while(size < str->size())
+	{
+		int start = 0;
+		for(; start < str->size(); start++)
+		{
+			int end = start + size;
+			if(end < str->size())
+			{
+				string substring;
+				for(int i = start; i <= end; i++)
+				{
+					substring += str->at(i);
+				}
+				substrings->push_back(substring);
+			}
+		}
+		size++;
+	}
+}
 ```

@@ -1,22 +1,24 @@
 #include <iostream>
 #include <vector>
+#include <string>
+
 using namespace std;
 
-void generate_all_subarrays(vector<int> *array, vector<vector<int>> *subarrays)
+void generate_all_subarrays(string *str, vector<string> *subarrays)
 {
 	int size = 0;
-	while(size < array->size())
+	while(size < str->size())
 	{
 		int start = 0;
-		for(; start < array->size(); start++)
+		for(; start < str->size(); start++)
 		{
 			int end = start + size;
-			if(end < array->size())
+			if(end < str->size())
 			{
-				vector<int> subarray;
+				string subarray;
 				for(int i = start; i <= end; i++)
 				{
-					subarray.push_back(array->at(i));
+					subarray += str->at(i);
 				}
 				subarrays->push_back(subarray);
 			}
@@ -28,9 +30,9 @@ void generate_all_subarrays(vector<int> *array, vector<vector<int>> *subarrays)
 // Main
 int main(int argc, char const *argv[])
 {
-	vector<int> array = {1,2,3,4,5};
-	vector<vector<int>> subarrays;
-	generate_all_subarrays(&array, &subarrays);
+	string str = "abc";
+	vector<string> subarrays;
+	generate_all_subarrays(&str, &subarrays);
 	for(int i = 0; i < subarrays.size(); i++)
 	{
 		cout<<"[ ";

@@ -1,4 +1,4 @@
-# Backlog (31st)
+## Backlog (31st)
 0. SubArray
 1. Powerset and Sub-sequence.
 2. QuickSelect
@@ -10,7 +10,16 @@
 8. Spiral Traversal
 
 ---
-# Binary Tree Day (1st)
+## Binary Search Tree (2nd)
+0. BST Construction
+1. BST Properties Finder- Height, No of nodes, Different Traversal,
+2. Validate BST
+3. Find Closest Value In BST.
+4. BST Traversal
+5. Same BSTs
+
+---
+## Binary Tree Day (1st)
 0. Branch Sum
 1. Invert Binary Tree
 2. Max Path Sum In Binary Tree
@@ -19,15 +28,7 @@
 5. Right Sibling Tree
 
 ---
-# Binary Search Tree (2nd)
-0. BST Construction
-1. BST Properties Finder- Height, No of nodes, Different Traversal,
-2. Validate BST
-3. Find Closest Value In BST.
-4. BST Traversal
-5. Same BSTs
----
-# Recursion (3rd)
+## Recursion (3rd)
 0. Nth Fibanacci
 1. Product Sum
 2. Permutation
@@ -36,4 +37,5 @@
 5. Interweaving Strings
 6. Number of Binary Tree Topologies
 
-# DP Weekend (4th - 5th)
+--
+## DP Weekend (4th - 5th)
