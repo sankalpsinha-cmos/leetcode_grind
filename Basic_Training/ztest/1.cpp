@@ -4,44 +4,29 @@
 
 using namespace std;
 
-void generate_all_subarrays(string *str, vector<string> *subarrays)
+void generate_power_set(string str, string set, vector<string> *powerset, int n)
 {
-	int size = 0;
-	while(size < str->size())
+	
+	// If we reach a point where there are no more characters in the string to consider then we add the generated set to the powerset and exit the recursion.
+	if(n >= 0)
 	{
-		int start = 0;
-		for(; start < str->size(); start++)
-		{
-			int end = start + size;
-			if(end < str->size())
-			{
-				string subarray;
-				for(int i = start; i <= end; i++)
-				{
-					subarray += str->at(i);
-				}
-				subarrays->push_back(subarray);
-			}
-		}
-		size++;
+		// Lets Exclude the last character and go on.
+		generate_power_set(str,set,powerset,n-1);
+		// Lets Include the last character and go on.
+		generate_power_set(str,set+=str.at(n),powerset,n-1);
 	}
+	else powerset->push_back(set);
 }
 
 // Main
 int main(int argc, char const *argv[])
 {
-	string str = "abc";
-	vector<string> subarrays;
-	generate_all_subarrays(&str, &subarrays);
-	for(int i = 0; i < subarrays.size(); i++)
-	{
-		cout<<"[ ";
-		for(int j = 0; j < subarrays[i].size(); j++)
-		{
-			cout<<subarrays[i][j]<<" ";
-		}
-		cout<<"], ";
-	}
+	string str = "xyz";
+	vector<string> powerset;
+	string set = "";
+	generate_power_set(str,set,&powerset,str.size()-1);
+	for(auto itr = powerset.begin(); itr != powerset.end(); itr++) cout<<*itr<<" ";
 	cout<<endl;
+	cout<<powerset.size()<<endl;
 	return 0;
 }

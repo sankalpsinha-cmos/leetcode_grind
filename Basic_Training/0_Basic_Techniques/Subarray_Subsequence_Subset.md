@@ -10,8 +10,9 @@ Then the valid sub-arrays are:
 [1], [2], [3], [1,2], [2,3] and [1,2,3].
 
 Notice that each valid sub-array is a contigeous slice of the orginal array.
+
+No of sub-array for an array with 'N' elements: (N(N+1))/2
 ```
-### No of sub-array for an array with 'N' elements: (N(N+1))/2
 
 ```C++
 void generate_all_subarrays(vector<int> *array, vector<vector<int>> *subarrays)
@@ -38,8 +39,9 @@ void generate_all_subarrays(vector<int> *array, vector<vector<int>> *subarrays)
 }
 ```
 ---
-## SubString
+## SubString == SubArray
 A Sub-String is a contigeous slice of the original string.
+
 It is the same as the sub-array in the context of a string.
 ```
 Let s = 'abc'
@@ -48,8 +50,11 @@ Then its valid substrings are:
 ['a', 'b', 'c', 'ab', 'bc', 'abc']
 
 Notice that each valid sub-string is a contigeous slice of the orginal string.
+
+No of sub-strings for a string with 'N' elements: (N(N+1))/2
+
 ```
-### No of sub-strings for a string with 'N' elements: (N(N+1))/2
+
 ```C++
 // The same logic as sub-array generation.
 void generate_all_substrings(string *str, vector<string> *substrings)
@@ -75,3 +80,76 @@ void generate_all_substrings(string *str, vector<string> *substrings)
 	}
 }
 ```
+---
+## SubSequence
+A sub-sequence is a slice of the original sequence such that the relative odering of the elements is maintained.
+
+When a sub-sequence is contigeous in nature then it is called a sub-array.
+```
+Let A = [1,2,3].
+
+Then a = [1,3] is a sub-sequence but not a sub-array.
+But b = [1,2] is a sub-sequence and also a sub-array.
+
+No of sub-sequences for a string/array with N elements: 2^n.
+```
+**NOTE AND DIGEST that the idea of generating all the sub-sequences of an array/string is == Generating the power-set of an array/string.**
+
+---
+
+## How to generate the power-set of an array/string?
+
+The idea is similar to the 0/1 knapsack problem.
+
+For each element in the set we have 2 options to evaluate.
+1. Include the element in the powerset.
+2. Exclude the element from the powerset.
+
+### **Approach 1: Recursion**
+This question teaches us the power of recursion and is very insightful.
+
+So we take a string/array of size n and for its last element we ask:
+1. Lets include it in the set and go on.
+2. Lets exclude it from the set and go on.
+
+**These questions are then asked recursivly on the string from size n-1 till 0.**
+
+and when hit the base condition of empty string we push the set into the powerset.
+
+```
+The recurrence relation of this reccursive program is:
+T(n) = 2T(n-1) + c.
+
+Resulting in a time complexity of O(2^n).
+```
+
+The recursion tree of the function is given below:
+
+![recurssion tree image](./resources/1.jpeg)
+
+What are the variables the function takes?
+1. str = the original string whoes power set is being generated.
+2. set = a set that is generated at the end of the recursion.
+3. powerset = the set of all sets, the vector that holds the resultant poerset.
+4. n = the cuurent character in the string we are considering.
+
+```C++
+void generate_power_set(string str, string set, vector<string> *powerset, int n)
+{
+	// If we reach a point where there are no more characters in the string to consider then we add the generated set to the powerset and exit the recursion.
+	if(n < 0) powerset->push_back(set);
+	else
+	{
+		// Lets Exclude the last character and go on.
+		generate_power_set(str,set,powerset,n-1);
+		// Lets Include the last character and go on.
+		generate_power_set(str,set+=str.at(n),powerset,n-1);
+	}
+}
+
+// Time Complexity: O(2^n).
+// Space Complexity: O(n) or maybe O(n^2) if you assume that the average size of the 'set' string is n/2 at each function call.
+```
+
+### **Approach 2: **
+---
