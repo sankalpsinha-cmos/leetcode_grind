@@ -99,13 +99,13 @@ No of sub-sequences for a string/array with N elements: 2^n.
 
 ## How to generate the power-set of an array/string?
 
+### **Approach 1: Recursion**
 The idea is similar to the 0/1 knapsack problem.
 
 For each element in the set we have 2 options to evaluate.
 1. Include the element in the powerset.
 2. Exclude the element from the powerset.
 
-### **Approach 1: Recursion**
 This question teaches us the power of recursion and is very insightful.
 
 So we take a string/array of size n and for its last element we ask:
@@ -150,6 +150,45 @@ void generate_power_set(string str, string set, vector<string> *powerset, int n)
 // Time Complexity: O(2^n).
 // Space Complexity: O(n) or maybe O(n^2) if you assume that the average size of the 'set' string is n/2 at each function call.
 ```
+---
+### **Approach 2: Bit Operation Magic**
 
-### **Approach 2: **
+This ideea is based on the fact that the binary repersenttaion of numbers from 0 to 2^n - 1 give us all the sub-sequences possible. So if we mask the string with these binary numbers we get all the sub-sequnces of the string.
+```
+Set  = [a,b,c]
+power_set_size = pow(2, 3) = 8
+Run for binary counter = 000 to 111
+
+Value of Counter            Subset
+0    000                    -> Empty set
+1    001                    -> a
+2    010                    -> b
+3    011                    -> ab
+4    100                    -> c
+5    101                    -> ac
+6    110                    -> bc
+7    111                    -> abc
+```
+
+```C++
+void generate_all_subsequences(string str, vector<string> *sub_sequences)
+{
+	for(int i = 0; i < pow(2,str.size()); i++)
+	{
+		string sub_sequence ="";
+		for(int j = 0; j < str.size(); j++)
+		{
+			if(i&(1<<j)) sub_sequence += str[j];
+		}
+		sub_sequences->push_back(sub_sequence);
+	}
+}
+// Time: O(n2^n) : Outer loops runs 2^n times. Inner loop will run n times for each outer loop run, So total of n2^n runs.
+// Space:
+```
+---
+
+### **Approach 3: Iterative Approach **
+
+
 ---

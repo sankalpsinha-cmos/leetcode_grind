@@ -1,12 +1,13 @@
+### CD = Code Done | Al= Analysis Left
 ## Backlog (31st)
 0. ~~SubArray~~
-1. Powerset and Sub-sequence.
-2. QuickSelect
-3. Search For Range
-4. Search In a Sorted Matrix
-5. Shifted Binary Search
-7. Longest Peak
-8. Spiral Traversal
+1. Powerset and Sub-sequence. (CD AL)
+2. QuickSelect. (CD AL)
+3. Search For Range. (CD AL)
+4. Search In a Sorted Matrix. (CD AL)
+5. Shifted Binary Search. 
+7. Longest Peak.
+8. Spiral Traversal.
 
 ---
 ## Binary Search Tree (2nd)
