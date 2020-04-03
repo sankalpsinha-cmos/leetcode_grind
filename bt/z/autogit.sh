@@ -1,7 +1,7 @@
 printf "\n\nAuto Git-Hub Push Script Initiated !!\n\n"
 cd ~/OneDrive/code/leetcode_grind/
 git status
-
+git add -a
 printf "\n\nAll changes added to commit queue...\n\n"
 git commit -a -m "Daily Prac"
 printf "\n\n Git Commit successful...\n\n"
