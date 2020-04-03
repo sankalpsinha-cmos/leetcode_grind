@@ -28,14 +28,5 @@
 5. Right Sibling Tree
 
 ---
-## Recursion (3rd)
-0. Nth Fibanacci
-1. Product Sum
-2. Permutation
-3. Powerset
-4. Lowest Common Manager
-5. Interweaving Strings
-6. Number of Binary Tree Topologies
-
 --
-## DP Weekend (4th - 5th)
+## Recursion & DP Weekend (4th - 5th)
