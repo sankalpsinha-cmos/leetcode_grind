@@ -6,7 +6,7 @@ echo "All changes added to commit queue..."
 set date = %date%
 message = "Daily Prac $date"
 echo $message
-git commit -m echo $message
+git commit -am echo $message
 echo "Git commit successful..."
 git push
 echo "Git push successfull..."
