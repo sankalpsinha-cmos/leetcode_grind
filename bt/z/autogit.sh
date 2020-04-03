@@ -2,11 +2,8 @@ echo "Auto Git-Hub Push Script Initiated !!"
 cd ~/OneDrive/code/leetcode_grind/
 git status
 git add .
-echo "All changes added to commit queue..."
-set date = %date%
-message = "Daily Prac $date"
-echo $message
-git commit -am echo $message
-echo "Git commit successful..."
+echo "\nAll changes added to commit queue...\n"
+git commit -m "Daily Prac"
+echo "\n Git Commit successful...\n"
 git push
-echo "Git push successfull..."
+echo "\nGit push successfull...\n"
