@@ -1,9 +1,9 @@
-echo "Auto Git-Hub Push Script Initiated !!"
+printf "\n\nAuto Git-Hub Push Script Initiated !!\n\n"
 cd ~/OneDrive/code/leetcode_grind/
 git status
 git add .
-echo "\nAll changes added to commit queue...\n"
+printf "\nAll changes added to commit queue...\n"
 git commit -m "Daily Prac"
-echo "\n Git Commit successful...\n"
+printf "\n Git Commit successful...\n"
 git push
-echo "\nGit push successfull...\n"
+printf "\nGit push successfull...\n"
